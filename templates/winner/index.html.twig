@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello WinnerController!{% endblock %}
+
+{% block body %}
+
+<div class="container text-center mt-5">
+    <div class="row">
+        <div class="col">
+            <h2 id="titre"></h2>
+            <h1 style="color:green" id="winner"></h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div id="picProfile"></div>
+        </div>
+    </div>
+    <button type="button" class="btn btn-info mt-5" onclick="start()">Qui doit prendre sa douche ??</button>
+    <button type="button" class="btn btn-success mt-5" onclick="location.reload()">Recommencer</button>
+</div>
+<div class="container text-center mt-5 mx-auto">
+<style type="text/css">
+.tg  {border-color:#000000;border-spacing:0;border-style:solid;border-width:1px;}
+.tg td{background-color:#E0FFEB;border-color:#000000;border-style:solid;border-width:0px;color:#594F4F;
+  font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{background-color:#9DE0AD;border-color:#000000;border-style:solid;border-width:0px;color:#493F3F;
+  font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;word-break:normal;}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<div class="row">
+<table class="tg">
+  <thead>
+    <tr>
+      <th class="tg-0lax">Carla</th>
+      <th class="tg-0lax">Celia</th>
+      <th class="tg-0lax">Deanna</th>
+      <th class="tg-0lax">Joanna</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for winner in winners %}
+        {% if winner.name == 'Carla' %}
+        <tr>
+          <td class="tg-0lax" id="Carla">{{winner.date|date("d/m/Y")}}</td>
+          <td class="tg-0lax" id="Celia"></td>
+          <td class="tg-0lax" id="Deanna"></td>
+          <td class="tg-0lax" id="Joanna"></td>
+        </tr>
+        {% elseif winner.name == 'Celia'%}
+        <tr>
+          <td class="tg-0lax" id="Carla"></td>
+          <td class="tg-0lax" id="Celia">{{winner.date|date("d/m/Y")}}</td>
+          <td class="tg-0lax" id="Deanna"></td>
+          <td class="tg-0lax" id="Joanna"></td>
+        </tr>
+        {% elseif winner.name == 'Deanna'%}
+        <tr>
+          <td class="tg-0lax" id="Carla"></td>
+          <td class="tg-0lax" id="Celia"></td>
+          <td class="tg-0lax" id="Deanna">{{winner.date|date("d/m/Y")}}</td>
+          <td class="tg-0lax" id="Joanna"></td>
+        </tr>
+        {% elseif winner.name == 'Joanna'%}
+        <tr>
+          <td class="tg-0lax" id="Carla"></td>
+          <td class="tg-0lax" id="Celia"></td>
+          <td class="tg-0lax" id="Deanna"></td>
+          <td class="tg-0lax" id="Joanna">{{winner.date|date("d/m/Y")}}</td>
+        </tr>
+        {% endif %}
+      {% endfor %}
+  </tbody>
+</table>
+</div>
+<script>
+var prenoms = ['Carla', 'Celia', 'Deanna','Joanna'];
+var counter = 10;
+var winner = document.getElementById("winner");
+var picProfile = document.getElementById("picProfile");
+var myTitle = document.getElementById("titre");
+var winnerPrenom = [];
+var intervalId = null;
+
+function bip() {
+
+    shuffleNames();
+    counter--;
+    if(counter == 0) finish();
+}
+function start(){
+  intervalId = setInterval(bip, 1000);
+}	
+// Parcourir le tableau et afficher toutes les valeurs
+function shuffleNames() {
+    prenoms.sort(function(){return 0.5 - Math.random()});
+    winnerPrenom.push(prenoms[3]);     
+    for(var prenom of prenoms){
+      myTitle.innerHTML = prenom;
+    }
+}
+
+function finish() {
+  clearInterval(intervalId);
+  var vainqueur = winnerPrenom[9];
+  myTitle.innerHTML = " ";
+  winner.innerHTML = vainqueur;
+  switch(vainqueur) {
+    case 'Carla': picProfile.innerHTML = "<img src='images/Carlasmall.png'>"
+    break;
+    case 'Joanna': picProfile.innerHTML = "<img src='images/Josmall.png'>"
+    break;
+    case 'Deanna': picProfile.innerHTML = "<img src='images/Deannasmall.png'>"
+    break;
+    case 'Celia': picProfile.innerHTML = "<img src='images/Celiasmall.png'>"
+    break;
+  }
+  window.location.href = "?winner=" + vainqueur
+  confetti();
+}
+</script>
+
+{% endblock %}
